@@ -1,13 +1,13 @@
+using HRSC.Core.Adapters;
+using HRSC.Core.Adapters.Interfaces;
+using HRSC.Core.Extensions;
+using HRSC.Core.Managers;
+using HRSC.Core.Managers.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HRSC.Web
 {
@@ -24,6 +24,19 @@ namespace HRSC.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            //Add App Settings
+            var appSettings = new AppSettings();
+            Configuration.Bind("AppSettings", appSettings);
+
+            services.AddSingleton(appSettings);
+
+            services.AddTransient<IUserManager, UserManager>();
+            services.AddTransient<IEmployeeManager, EmployeeManager>();
+            services.AddTransient<IEmployeeTypeManager, EmployeeTypeManager>();
+            services.AddTransient<IPaymentManager, PaymentManager>();
+
+            services.AddTransient<ISalaryCalculator, SalaryCalculator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,9 +48,11 @@ namespace HRSC.Web
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                //app.UseExceptionHandler("/Home/Error");
+                ////The default HSTS value is 30 days.You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                //app.UseHsts();
+
+                app.UseStatusCodePagesWithRedirects("/Error/{0}");
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
