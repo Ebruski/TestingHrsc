@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRSC.Web", "HRSC.Web\HRSC.W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRSC.Core", "HRSC.Core\HRSC.Core.csproj", "{CA4942C9-D73D-4AD6-AD96-D47FFA01BB81}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRSC.Test", "HRSC.Test\HRSC.Test.csproj", "{BE41BDED-7901-4DEC-9DF6-A08DFDEF6696}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{CA4942C9-D73D-4AD6-AD96-D47FFA01BB81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA4942C9-D73D-4AD6-AD96-D47FFA01BB81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA4942C9-D73D-4AD6-AD96-D47FFA01BB81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE41BDED-7901-4DEC-9DF6-A08DFDEF6696}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE41BDED-7901-4DEC-9DF6-A08DFDEF6696}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE41BDED-7901-4DEC-9DF6-A08DFDEF6696}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE41BDED-7901-4DEC-9DF6-A08DFDEF6696}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
