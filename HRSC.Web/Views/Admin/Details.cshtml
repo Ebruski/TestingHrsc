@@ -1,0 +1,172 @@
+﻿@model DetailsViewModel;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">@Model.Employee.Name's Salary Page</h1>
+    <p>Process salary for the different months of the year</p>
+</div>
+
+<div class="row mt-5">
+    <div class="col-5">
+        <div class="bg-white rounded p-4 shadow mb-3">
+            <h3 class="text-secondary">Compute Staff's Salary</h3>
+
+            <form method="post" asp-controller="Admin" asp-action="CalculateSalary">
+                <div class="form-group rounded p-3" style="background-color:#8ec491">
+                    <strong>Employee Details</strong><br />
+                    @Model.Employee.EmployeeType.DisplayName<br />
+                    @if (Model.Employee.EmployeeType.SalaryType == HRSC.Core.Enums.SalaryType.RegularStaff)
+                    {
+                        @Model.Employee.EmployeeType.Amount <text> As Basic Salary</text> <br />
+
+                        @StaticCache.Tax <text> % Tax</text> <br />
+                    }
+                    else if (Model.Employee.EmployeeType.SalaryType == HRSC.Core.Enums.SalaryType.ContractualStaff)
+                    {
+                        @Model.Employee.EmployeeType.Amount <text> As Daily Pay</text> <br />
+                    }
+
+                    Birth Date :  @Model.Employee.BirthDate.ToString("dd/MM/yyyy")
+                </div>
+
+                <p><strong>Calculate Salary</strong></p>
+
+                @if (TempData["MsgSuccess"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Employee Salary Computed</strong> @TempData["MsgSuccess"].
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    TempData["MsgSuccess"] = null;
+                }
+                else if (TempData["MsgError"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Employee Salary Computed Error</strong> @TempData["MsgError"].
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    TempData["MsgError"] = null;
+                }
+
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Month"></label>
+                    <select name="Month" class="form-control form-control-sm">
+                        <option value="January">January </option>
+                        <option value="February">February </option>
+                        <option value="March">March </option>
+                        <option value="April">April </option>
+                        <option value="May">May </option>
+                        <option value="June">June </option>
+                        <option value="July">July </option>
+                        <option value="August">August </option>
+                        <option value="September">September </option>
+                        <option value="October">October </option>
+                        <option value="November">November </option>
+                        <option value="December">December </option>
+                    </select>
+                    <span asp-validation-for="Month" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    @if (Model.Employee.EmployeeType.SalaryType == HRSC.Core.Enums.SalaryType.RegularStaff)
+                    {
+                        <label asp-for="DaysAbsence"></label>
+                        <input asp-for="DaysAbsence" class="form-control form-control-sm" maxlength="4" required />
+                    }
+                    else if (Model.Employee.EmployeeType.SalaryType == HRSC.Core.Enums.SalaryType.ContractualStaff)
+                    {
+                        <label asp-for="DaysWorked"></label>
+                        <input asp-for="DaysWorked" class="form-control form-control-sm" maxlength="4" required />
+                    }
+                </div>
+                <input type="hidden" name="EmployeeId" value="@Model.EmployeeId" />
+                <input type="hidden" name="Employee" value="@Model.Employee" />
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Calculate Salary</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-1"></div>
+    <div class="col-6">
+        <div class="col-12">
+            <h3 class="text-secondary">Payment History</h3>
+
+            <div class="table-responsive">
+                @if (Model.Payments != null && Model.Payments.Count() > 0)
+                {
+                    <table class="table table-bordered table-striped bg-white small table-fit" style="width:100%">
+                        <tr>
+                            <th>Payment Month</th>
+                            @if (Model.Employee.EmployeeType.SalaryType == HRSC.Core.Enums.SalaryType.RegularStaff)
+                            {
+                                <th>Days Absent From Work</th>
+                            }
+                            else if (Model.Employee.EmployeeType.SalaryType == HRSC.Core.Enums.SalaryType.ContractualStaff)
+                            {
+                                <th>Days Worked</th>
+                            }
+                            <th>Tax Paid</th>
+                            <th>Salary Paid</th>
+                        </tr>
+                        @foreach (var i in Model.Payments)
+                        {
+                            <tr>
+                                <td>@i.Month</td>
+                                <td>@i.Days</td>
+                                <td>@i.Tax.ToString("N2")</td>
+                                <td>@i.SalaryPaid.ToString("N2")</td>
+                            </tr>
+                        }
+                    </table>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav> }
+                else
+                {
+                    <table class="table table-bordered table-striped bg-white small">
+                        <tr>
+                            <th>Payment Month</th>
+                            @if (Model.Employee.EmployeeType.SalaryType == HRSC.Core.Enums.SalaryType.RegularStaff)
+                            {
+                                <th>Days Absent From Work</th>
+                            }
+                            else if (Model.Employee.EmployeeType.SalaryType == HRSC.Core.Enums.SalaryType.ContractualStaff)
+                            {
+                                <th>Days Worked</th>
+                            }
+                            <th>Tax Paid</th>
+                            <th>Salary Paid</th>
+                        </tr>
+                        <tr>
+                            <td class="p-3" colspan="4">No Payment to display..</td>
+                        </tr>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>

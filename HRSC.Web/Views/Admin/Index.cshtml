@@ -1,0 +1,123 @@
+﻿@model CreateEmployeeViewModel;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Hey, @StaticCache.User.Name</h1>
+    <p>Welcome to HRSC administrator panel</p>
+</div>
+
+<div class="row mt-5">
+    <div class="col-4">
+        <div id="signin-area">
+            <div class="bg-white rounded p-4 shadow mb-3">
+                <h3 class="text-secondary">Create New Employee</h3>
+
+                <form method="post" asp-controller="Admin" asp-action="CreateEmployee">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="FirstName"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="LastName"></label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="TIN"></label>
+                        <input asp-for="TIN" class="form-control" />
+                        <span asp-validation-for="TIN" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="BirthDate"></label>
+                        <input type="date" asp-for="BirthDate" class="form-control" />
+                        <span asp-validation-for="BirthDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="EmployeeType"></label>
+                        <select name="EmployeeType" class="form-control form-control-sm">
+                            @foreach (var i in StaticCache.EmployeeTypes)
+                            {
+                                <option value="@i.Id">@i.DisplayName</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Create Employee</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-2"></div>
+    <div class="col-6">
+        <div class="col-12">
+            <h3 class="text-secondary">Employees</h3>
+
+            <div class="table-responsive">
+                @if (StaticCache.Employees != null && StaticCache.Employees.Count() > 0)
+                {
+                    <table class="table table-bordered table-striped bg-white small table-fit" style="width:100%">
+                        <tr>
+                            <th>Employee Name</th>
+                            <th>Employee Tin</th>
+                            <th>Employee Birth Date</th>
+                            <th>Employee Type</th>
+                            <th></th>
+                        </tr>
+                        @foreach (var i in StaticCache.Employees)
+                        {
+                            <tr>
+                                <td>@i.Name</td>
+                                <td>@i.TIN</td>
+                                <td>@i.BirthDate.ToString("dd/MM/yyyy")</td>
+                                <td>@i.EmployeeType.Name</td>
+                                <td><a asp-controller="Admin" asp-action="Details" asp-route-employeeId="@i.Id">View Details</a></td>
+                            </tr>
+}
+                    </table>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav> }
+                else
+                {
+                    <table class="table table-bordered table-striped bg-white small">
+                        <tr>
+                            <th>Employee Name</th>
+                            <th>Employee Tin</th>
+                            <th>Employee Birth Date</th>
+                            <th>Employee Type</th>
+                        </tr>
+                        <tr>
+                            <td class="p-3" colspan="4">No employee to display..</td>
+                        </tr>
+                    </table>}
+            </div>
+        </div>
+    </div>
+</div>
