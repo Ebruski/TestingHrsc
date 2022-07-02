@@ -1,4 +1,4 @@
-## HR Salary Calculator
+## Hrsc
 This is a simple web app to help HR compute employee's monthly salary based on some specified employee type. Built with asp.net core 3.1 (C#) and JSON datastore using a custom built and generic DataContext manager which simulates a real db instance with .json files.
 Presentation is built with MVC Core, HTML, jQuery and Bootstrap.
 
